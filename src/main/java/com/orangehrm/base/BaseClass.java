@@ -12,10 +12,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 public class BaseClass {
 
-    protected Properties prop;
+    protected static Properties prop;
     protected WebDriver driver;
 
     @BeforeSuite
@@ -32,6 +34,7 @@ public class BaseClass {
         System.out.println("Setting up Browser"+this.getClass().getSimpleName());
         launchBrowser();
         configureBrowser();
+        staticWait(2);
     }
 
     private void launchBrowser(){
@@ -47,7 +50,7 @@ public class BaseClass {
         }else if (browser.equalsIgnoreCase("edge")) {
             driver = new EdgeDriver();
         }else{
-            throw new IllegalArgumentException("Browser Not Supported"+browser);
+            throw new IllegalArgumentException("Browser Not Supported "+browser);
         }
     }
 
@@ -77,5 +80,13 @@ public class BaseClass {
         } catch (Exception e) {
             System.out.println("Failed to quit Browser"+e.getMessage());
         }
+    }
+
+    //Static wait for pause
+
+    public void staticWait(int seconds){
+
+        LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(seconds));
+
     }
 }
