@@ -82,8 +82,23 @@ public class BaseClass {
         }
     }
 
-    //Static wait for pause
 
+    //Getter Method for prop
+    public static Properties getProp() {
+        return prop;
+    }
+
+    //Driver getter method
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    //Driver setter method
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    //Static wait for pause
     public void staticWait(int seconds){
 
         LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(seconds));
