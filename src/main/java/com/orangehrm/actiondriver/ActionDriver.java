@@ -56,20 +56,23 @@ public class ActionDriver {
         }
     }
 
-    //Method to compare two text
-    public void compareText(By by, String expectedText){
+    //Method to compare two text --changed the return type
+    public boolean compareText(By by, String expectedText){
         try {
             waitForElementToBeVisible(by);
             String actualText = driver.findElement(by).getText();
             if(expectedText.equals(actualText)){
-                System.out.println("Text are Matching: " + actualText+" equals "+expectedText);
+                System.out.println("Texts are Matching: " + actualText+" equals "+expectedText);
+                return true;
             }
             else {
-                System.out.println("Text are not Matching: " + actualText+" not equals "+expectedText);
+                System.out.println("Texts are not Matching: " + actualText+" not equals "+expectedText);
+                return false;
             }
         } catch (Exception e) {
             System.out.println("Unable to compare texts: " + e.getMessage());
         }
+        return false;
     }
 
 

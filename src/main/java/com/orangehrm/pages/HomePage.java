@@ -1,6 +1,7 @@
 package com.orangehrm.pages;
 
 import com.orangehrm.actiondriver.ActionDriver;
+import com.orangehrm.base.BaseClass;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -15,8 +16,11 @@ public class HomePage {
     private By orangeHRMlogo = By.xpath("//div[@class='oxd-brand-banner']//img");
 
     //Initialize the ActionDriver object by passing WebDriver instance
-    public HomePage(WebDriver driver){
+    /*public HomePage(WebDriver driver){
         this.actionDriver = new ActionDriver(driver);
+    }*/
+    public HomePage(WebDriver driver) {
+        this.actionDriver = BaseClass.getActionDriver();
     }
 
     //Method to verify if Admin tab is visible
