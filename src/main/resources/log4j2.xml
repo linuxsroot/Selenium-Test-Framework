@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %C{1} - %msg%n"/>
+        </Console>
+
+        <!-- General File Appender (INFO, DEBUG, TRACE) -->
+        <File name="FileLogger" fileName="logs/app.log" append="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %C{1} - %msg%n"/>
+        </File>
+
+        <!-- Error File Appender (ERROR, FATAL) -->
+        <File name="ErrorFileLogger" fileName="logs/error.log" append="true">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %C{1} - %msg%n"/>
+        </File>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!-- Package-specific logger -->
+        <Logger name="com.orangehrm" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+            <AppenderRef ref="ErrorFileLogger"/>
+        </Logger>
+
+        <!-- ROOT LOGGER (MANDATORY) -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+            <AppenderRef ref="ErrorFileLogger"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
