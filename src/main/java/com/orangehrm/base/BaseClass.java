@@ -1,6 +1,7 @@
 package com.orangehrm.base;
 
 import com.orangehrm.actiondriver.ActionDriver;
+import com.orangehrm.utilities.ExtentManager;
 import com.orangehrm.utilities.LoggerManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -36,6 +37,9 @@ public class BaseClass {
         FileInputStream fis = new FileInputStream("src/main/resources/config.properties");
         prop.load(fis);
         logger.info("config.properties loaded");
+
+        //Start the Extent Report
+        ExtentManager.getReporter();
     }
 
 
@@ -71,15 +75,18 @@ public class BaseClass {
         if (browser.equalsIgnoreCase("chrome")) {
             //driver = new ChromeDriver();
             driver.set(new ChromeDriver()); //New Changes as per Thread
+            ExtentManager.registerDriver(getDriver());
             logger.info("ChromeDriver Instance is created");
         }
         else if (browser.equalsIgnoreCase("firefox")) {
             //driver = new FirefoxDriver();
             driver.set(new FirefoxDriver()); //New Changes as per Thread
+            ExtentManager.registerDriver(getDriver());
             logger.info("FirefoxDriver Instance is created");
         }else if (browser.equalsIgnoreCase("edge")) {
             //driver = new EdgeDriver();
             driver.set(new EdgeDriver()); //New Changes as per Thread
+            ExtentManager.registerDriver(getDriver());
             logger.info("EdgeDriver Instance is created");
         }else{
             throw new IllegalArgumentException("Browser Not Supported "+browser);
@@ -117,6 +124,7 @@ public class BaseClass {
         logger.info("WebDriver instance is closed");
         driver.remove();
         actionDriver.remove();
+        ExtentManager.endTest();
 
     }
 
