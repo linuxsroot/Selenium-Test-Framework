@@ -39,7 +39,7 @@ public class BaseClass {
         logger.info("config.properties loaded");
 
         //Start the Extent Report
-        ExtentManager.getReporter();
+        //ExtentManager.getReporter();  --This has been implemented in TestListener
     }
 
 
@@ -124,7 +124,7 @@ public class BaseClass {
         logger.info("WebDriver instance is closed");
         driver.remove();
         actionDriver.remove();
-        ExtentManager.endTest();
+        //ExtentManager.endTest();  --This has been implemented in TestListener
 
     }
 

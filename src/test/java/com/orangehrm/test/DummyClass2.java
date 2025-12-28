@@ -8,7 +8,7 @@ public class DummyClass2 extends BaseClass {
 
     @Test
     public void dummyTest(){
-        ExtentManager.startTest("DummyTest2 Test");
+        //ExtentManager.startTest("DummyTest2 Test");  --This has been implemented in TestListener
         String title = getDriver().getTitle();
         ExtentManager.logStep("Verifying the title");
         assert title.equals("OrangeHRM"):"Test Failed - Title is not Matching";
