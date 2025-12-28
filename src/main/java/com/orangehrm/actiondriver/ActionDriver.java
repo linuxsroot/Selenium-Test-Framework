@@ -78,7 +78,7 @@ public class ActionDriver {
             }
             else {
                 logger.error("Texts are not Matching: {} not equals {}", actualText, expectedText);
-                ExtentManager.logFailure(BaseClass.getDriver(),"Compare Text","Text Comparison Failed! "+actualText+" not equals "+expectedText);
+                ExtentManager.logFailure(BaseClass.getDriver(),"Text Comparison Failed!","Text Comparison Failed! "+actualText+" not equals "+expectedText);
                 return false;
             }
         } catch (Exception e) {
