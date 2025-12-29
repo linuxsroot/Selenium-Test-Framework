@@ -3,6 +3,7 @@ package com.orangehrm.test;
 import com.orangehrm.base.BaseClass;
 import com.orangehrm.pages.HomePage;
 import com.orangehrm.pages.LoginPage;
+import com.orangehrm.utilities.DataProviders;
 import com.orangehrm.utilities.ExtentManager;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -19,12 +20,12 @@ public class LoginPageTest extends BaseClass {
         homePage = new HomePage(getDriver());
     }
 
-    @Test
-    public void verifyValidLoginTest(){
+    @Test(dataProvider = "validLoginData", dataProviderClass = DataProviders.class)
+    public void verifyValidLoginTest(String username, String password){
         //ExtentManager.startTest("Valid Login Test");  --This has been implemented in TestListener
         System.out.println("Running testMethod1 on thread: "+Thread.currentThread().getId());
         ExtentManager.logStep("Navigating to Login Page entering username and Password");
-        loginPage.login("Admin","admin123");
+        loginPage.login(username,password);
         ExtentManager.logStep("Verifying Admin tab is visible or not");
         Assert.assertTrue(homePage.isAdminTabVisible(),"Admin tab should be visible after successful login");
         ExtentManager.logStep("Validation Successful");
@@ -33,12 +34,12 @@ public class LoginPageTest extends BaseClass {
         staticWait(2);
     }
 
-    @Test
-    public void invalidLoginTest(){
+    @Test(dataProvider = "inValidLoginData", dataProviderClass = DataProviders.class)
+    public void invalidLoginTest(String username, String password){
         //ExtentManager.startTest("Invalid Login Test");  --This has been implemented in TestListener
         System.out.println("Running testMethod2 on thread: "+Thread.currentThread().getId());
         ExtentManager.logStep("Navigating to Login Page entering username and Password");
-        loginPage.login("Admin","admin");
+        loginPage.login(username,password);
         String expectedErrorMessage = "Invalid credentials";
         Assert.assertTrue(loginPage.verifyErrorMessage(expectedErrorMessage),"Test Failed: Invalid error message");
         ExtentManager.logStep("Validation Successful");

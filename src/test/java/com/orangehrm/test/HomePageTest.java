@@ -3,6 +3,7 @@ package com.orangehrm.test;
 import com.orangehrm.base.BaseClass;
 import com.orangehrm.pages.HomePage;
 import com.orangehrm.pages.LoginPage;
+import com.orangehrm.utilities.DataProviders;
 import com.orangehrm.utilities.ExtentManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +23,11 @@ public class HomePageTest extends BaseClass {
         homePage = new HomePage(getDriver());
     }
 
-    @Test
-    public void verifyOrangeHRMLogo(){
+    @Test(dataProvider = "validLoginData", dataProviderClass = DataProviders.class)
+    public void verifyOrangeHRMLogo(String username, String password){
         //ExtentManager.startTest("Home Page Verify Logo Test");  --This has been implemented in TestListener
         ExtentManager.logStep("Navigating to Login Page entering username and Password");
-        loginPage.login("admin", "admin123");
+        loginPage.login(username, password);
         ExtentManager.logStep("Verifying Logo is visible or not");
         Assert.assertTrue(homePage.isOrangeHRMLogo(),"Logo is not visible");
         ExtentManager.logStep("Validation Successful");
