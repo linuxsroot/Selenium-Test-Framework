@@ -18,6 +18,13 @@ public class DataProviders {
         return getSheetData("inValidLoginData");
     }
 
+    @DataProvider(name="emplVerification")
+    public static Object[][] emplVerification(){
+        return getSheetData("emplVerification");
+    }
+
+
+
     private static Object[][] getSheetData(String sheetName){
         List<String[]> sheetData = ExcelReaderUtility.getSheetData(FILE_PATH, sheetName);
 

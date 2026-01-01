@@ -43,6 +43,29 @@ public class HomePage {
         return actionDriver.isDisplayed(orangeHRMlogo);
     }
 
+    //Method to Navigate to PIM tab
+    public void clickOnPIMTab(){
+        actionDriver.click(pimTab);
+    }
+
+    //Employee Search
+    public void employeeSearch(String value){
+        actionDriver.enterText(employeeSearch, value);
+        actionDriver.click(searchButton);
+        actionDriver.scrollToElement(emplFirstAndMiddleName);
+    }
+
+    //Verify employee first and middle name
+    public boolean verifyEmployeeFirstAndMiddleName(String emplFirstAndMiddleNameFromDb){
+        return actionDriver.compareText(emplFirstAndMiddleName,emplFirstAndMiddleNameFromDb);
+
+    }
+
+    //verify employee last name
+    public boolean verifyEmployeeLastName(String emplLastNameFromDb){
+        return actionDriver.compareText(emplLastName,emplLastNameFromDb);
+    }
+
     //Method to perform logout operation
     public void logout(){
         actionDriver.click(userIdButton);
