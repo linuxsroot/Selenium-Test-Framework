@@ -15,10 +15,20 @@ public class HomePage {
     private By logOutButton = By.xpath("//a[text()='Logout']");
     private By orangeHRMlogo = By.xpath("//div[@class='oxd-brand-banner']//img");
 
+
+    private By pimTab = By.xpath("//span[text()='PIM']");
+    private By employeeSearch = By.xpath("//label[text()='Employee Name']/parent::div/following-sibling::div/div/div/input");
+    private By searchButton = By.xpath("//button[text()=' Search ']");
+    private By emplFirstAndMiddleName = By.xpath("//div[@class='oxd-table-card']/div/div[3]");
+    private By emplLastName = By.xpath("//div[@class='oxd-table-card']/div/div[4]");
+
+
     //Initialize the ActionDriver object by passing WebDriver instance
     /*public HomePage(WebDriver driver){
         this.actionDriver = new ActionDriver(driver);
     }*/
+
+
     public HomePage(WebDriver driver) {
         this.actionDriver = BaseClass.getActionDriver();
     }
