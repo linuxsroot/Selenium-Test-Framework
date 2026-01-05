@@ -38,7 +38,13 @@ public class TestListener implements ITestListener {
         String testName = result.getMethod().getMethodName();
         String failureMessage = result.getThrowable().getMessage();
         ExtentManager.logStep(failureMessage);
-        ExtentManager.logFailure(BaseClass.getDriver(),"Test Failed!","Test End: "+testName+" - ❌ Test Failed");
+
+        if(!result.getTestClass().getName().toLowerCase().contains("api")){
+            ExtentManager.logFailure(BaseClass.getDriver(),"Test Failed!","Test End: "+testName+" - ❌ Test Failed");
+        }else{
+            ExtentManager.logFailureAPI("Test End: "+testName+" - ❌ Test Failed");
+        }
+
     }
 
     //Triggered when a Test skips
@@ -53,7 +59,15 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestSuccess(ITestResult result) {
         String testName = result.getMethod().getMethodName();
-        ExtentManager.logStepWithScreenshot(BaseClass.getDriver(),"Test Passed Successfully!","Test End: "+testName+" - ✅ Test Passed");
+
+        if(!result.getTestClass().getName().toLowerCase().contains("api")){
+            ExtentManager.logStepWithScreenshot(BaseClass.getDriver(),"Test Passed Successfully!",
+                    "Test End: "+testName+" - ✅ Test Passed");
+
+        }else{
+            ExtentManager.logStepValidationForAPI("Test End: "+testName+" - ✅ Test Passed");
+        }
+
 
     }
 }
