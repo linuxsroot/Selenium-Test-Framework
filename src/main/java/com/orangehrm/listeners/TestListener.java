@@ -2,11 +2,17 @@ package com.orangehrm.listeners;
 
 import com.orangehrm.base.BaseClass;
 import com.orangehrm.utilities.ExtentManager;
+import com.orangehrm.utilities.RetryAnalyzer;
+import org.testng.IAnnotationTransformer;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.annotations.ITestAnnotation;
 
-public class TestListener implements ITestListener {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+public class TestListener implements ITestListener, IAnnotationTransformer {
 
     //Triggered when a test starts
     @Override
@@ -69,5 +75,10 @@ public class TestListener implements ITestListener {
         }
 
 
+    }
+
+    @Override
+    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
+        annotation.setRetryAnalyzer(RetryAnalyzer.class);
     }
 }

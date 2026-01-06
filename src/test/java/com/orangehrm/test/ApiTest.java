@@ -2,8 +2,8 @@ package com.orangehrm.test;
 
 import com.orangehrm.utilities.ApiUtility;
 import com.orangehrm.utilities.ExtentManager;
+import com.orangehrm.utilities.RetryAnalyzer;
 import io.restassured.response.Response;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
