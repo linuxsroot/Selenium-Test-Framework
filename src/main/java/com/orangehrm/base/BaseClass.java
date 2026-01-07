@@ -6,8 +6,11 @@ import com.orangehrm.utilities.LoggerManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
@@ -37,20 +40,17 @@ public class BaseClass {
         return softAssert.get();
     }
 
-
-
     @BeforeSuite
     public void loadConfig() throws IOException {
         //Load the configuration file
         prop = new Properties();
-        FileInputStream fis = new FileInputStream("src/main/resources/config.properties");
+        FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"/src/main/resources/config.properties");
         prop.load(fis);
         logger.info("config.properties loaded");
 
         //Start the Extent Report
         //ExtentManager.getReporter();  --This has been implemented in TestListener
     }
-
 
     @BeforeMethod
     public synchronized void setup() throws IOException {
@@ -82,19 +82,51 @@ public class BaseClass {
         String browser = prop.getProperty("browser");
 
         if (browser.equalsIgnoreCase("chrome")) {
+            //Create ChromeOptions
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless=new"); //Run Chrome in headless mode
+            options.addArguments("--disable-gpu"); //Disable GPU for headless mode
+            options.addArguments("--window-size=1920,1080"); //Set Window size
+            options.addArguments("--disable-notifications"); //Disable browser notifications
+            options.addArguments("--no-sandbox"); //Required for some CI environments
+            //options.addArguments("--start-maximized");
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--disable-dev-shm-usage"); // Resolve issues in resources shared usages
+
             //driver = new ChromeDriver();
-            driver.set(new ChromeDriver()); //New Changes as per Thread
+            driver.set(new ChromeDriver(options)); //New Changes as per Thread
             ExtentManager.registerDriver(getDriver());
             logger.info("ChromeDriver Instance is created");
         }
         else if (browser.equalsIgnoreCase("firefox")) {
+
+            //Create FirefoxOptions
+            FirefoxOptions options = new FirefoxOptions();
+            options.addArguments("--headless"); //Run Firefox in headless mode
+            options.addArguments("--disable-gpu"); //Disable GPU for headless mode
+            options.addArguments("--width=1920"); //Set browser width
+            options.addArguments("--height=1080"); //Set browser height
+            options.addArguments("--disable-notifications"); //Disable browser notifications
+            options.addArguments("--no-sandbox"); //Required for some CI/CD environments
+            options.addArguments("--disable-dev-shm-usage"); // Resolve issues in resources shared usages
+
             //driver = new FirefoxDriver();
-            driver.set(new FirefoxDriver()); //New Changes as per Thread
+            driver.set(new FirefoxDriver(options)); //New Changes as per Thread
             ExtentManager.registerDriver(getDriver());
             logger.info("FirefoxDriver Instance is created");
         }else if (browser.equalsIgnoreCase("edge")) {
+
+            //Create EdgeOptions
+            EdgeOptions options = new EdgeOptions();
+            options.addArguments("--headless"); //Run Edge in headless mode
+            options.addArguments("--disable-gpu"); //Disable GPU for headless mode
+            options.addArguments("--window-size=1920,1080"); //Set Window size
+            options.addArguments("--disable-notifications"); //Disable browser notifications
+            options.addArguments("--no-sandbox"); //Required for some CI environments
+            options.addArguments("--disable-dev-shm-usage"); // Resolve issues in resources shared usages
+
             //driver = new EdgeDriver();
-            driver.set(new EdgeDriver()); //New Changes as per Thread
+            driver.set(new EdgeDriver(options)); //New Changes as per Thread
             ExtentManager.registerDriver(getDriver());
             logger.info("EdgeDriver Instance is created");
         }else{
@@ -110,7 +142,7 @@ public class BaseClass {
         driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
 
         //Maximize the browser
-        getDriver().manage().window().maximize();
+        //getDriver().manage().window().maximize();
 
         //Navigate to URL
         try {
@@ -137,18 +169,10 @@ public class BaseClass {
 
     }
 
-
-//    //Getter Method for prop
     public static Properties getProp() {
         return prop;
     }
 
-    //Driver getter method
-//    public WebDriver getDriver() {
-//        return driver;
-//    }
-
-    //Getter Method for WebDriver
     public static WebDriver getDriver() {
 
         if (driver == null) {
@@ -158,7 +182,6 @@ public class BaseClass {
         return driver.get();
     }
 
-    //Getter Method for ActionDriver
     public static ActionDriver getActionDriver() {
 
         if (actionDriver == null) {
@@ -168,15 +191,11 @@ public class BaseClass {
         return actionDriver.get();
     }
 
-    //Driver setter method
     public void setDriver(ThreadLocal<WebDriver> driver) {
         BaseClass.driver = driver;
     }
 
-    //Static wait for pause
     public void staticWait(int seconds){
-
         LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(seconds));
-
     }
 }
