@@ -149,12 +149,12 @@ public class BaseClass {
 
                 //Create EdgeOptions
                 EdgeOptions options = new EdgeOptions();
-                //options.addArguments("--headless"); //Run Edge in headless mode
+                options.addArguments("--headless"); //Run Edge in headless mode
                 options.addArguments("--disable-gpu"); //Disable GPU for headless mode
                 options.addArguments("--window-size=1920,1080"); //Set Window size
                 options.addArguments("--disable-notifications"); //Disable browser notifications
-                options.addArguments("--no-sandbox"); //Required for some CI environments
-                options.addArguments("--disable-dev-shm-usage"); // Resolve issues in resources shared usages
+                //options.addArguments("--no-sandbox"); //Required for some CI environments
+                //options.addArguments("--disable-dev-shm-usage"); // Resolve issues in resources shared usages
 
                 //driver = new EdgeDriver();
                 driver.set(new EdgeDriver(options)); //New Changes as per Thread
