@@ -149,7 +149,7 @@ public class BaseClass {
 
                 //Create EdgeOptions
                 EdgeOptions options = new EdgeOptions();
-                options.addArguments("--headless"); //Run Edge in headless mode
+                //options.addArguments("--headless"); //Run Edge in headless mode
                 options.addArguments("--disable-gpu"); //Disable GPU for headless mode
                 options.addArguments("--window-size=1920,1080"); //Set Window size
                 options.addArguments("--disable-notifications"); //Disable browser notifications
