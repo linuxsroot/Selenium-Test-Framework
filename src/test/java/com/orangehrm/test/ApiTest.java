@@ -14,8 +14,6 @@ public class ApiTest {
 
         SoftAssert softAssert = new SoftAssert();
 
-        //Test Checking
-
         //Step1: Define API endpoint
         String endPoint = "https://jsonplaceholder.typicode.com/users/1";
         ExtentManager.logStep("API Endpoint: "+endPoint);
