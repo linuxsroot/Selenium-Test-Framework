@@ -17,7 +17,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -60,7 +59,7 @@ public class BaseClass {
 
     @BeforeMethod
     @Parameters("browser")
-    public synchronized void setup(String browser) throws IOException {
+    public void setup(String browser) throws IOException {
         System.out.println("Setting up Browser"+this.getClass().getSimpleName());
         launchBrowser(browser);
         configureBrowser();
@@ -83,7 +82,7 @@ public class BaseClass {
         logger.info("ActionDriver Initialized for Thread: {}", Thread.currentThread().getId());
     }
 
-    private synchronized void launchBrowser(String browser) {
+    private void launchBrowser(String browser) {
 
         //Initialize the WebDriver based on browser defined in config.properties file
         //String browser = prop.getProperty("browser");
@@ -107,6 +106,7 @@ public class BaseClass {
                 } else {
                     throw new IllegalArgumentException("Browser Not Supported: " + browser);
                 }
+                ExtentManager.registerDriver(getDriver());
                 logger.info("RemoteWebDriver instance created for Grid in headless mode");
             } catch (MalformedURLException e) {
                 throw new RuntimeException("Invalid Grid URL", e);
@@ -169,25 +169,32 @@ public class BaseClass {
     //Browser settings
     private void configureBrowser(){
 
-        //ImplicitWait
+        // Implicit Wait
         int implicitWait = Integer.parseInt(prop.getProperty("implicitWait"));
-        driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
+        getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(implicitWait));
 
-        //Maximize the browser
-        //getDriver().manage().window().maximize();
+        // maximize the browser
+        getDriver().manage().window().maximize();
 
-        //Navigate to URL
-        try {
-            getDriver().get(prop.getProperty("url"));
-        } catch (Exception e) {
-            System.out.println("Failed to navigate to the URL"+e.getMessage());
+        // Navigate to URL
+		/*try {
+			getDriver().get(prop.getProperty("url"));
+		} catch (Exception e) {
+			System.out.println("Failed to Navigate to the URL:" + e.getMessage());
+		} */
+
+        boolean seleniumGrid = Boolean.parseBoolean(prop.getProperty("seleniumGrid"));
+        if (seleniumGrid) {
+            getDriver().get(prop.getProperty("url_grid"));
+        } else {
+            getDriver().get(prop.getProperty("url_local"));
         }
 
     }
 
-    @AfterMethod
-    public synchronized void tearDown() {
-        if (getDriver() != null) {
+    @AfterMethod(alwaysRun = true)
+    public void tearDown() {
+        if (driver.get() != null) {
             try {
                 getDriver().quit();
             } catch (Exception e) {
@@ -197,6 +204,7 @@ public class BaseClass {
         logger.info("WebDriver instance is closed");
         driver.remove();
         actionDriver.remove();
+        softAssert.remove();
         //ExtentManager.endTest();  --This has been implemented in TestListener
 
     }
@@ -207,20 +215,22 @@ public class BaseClass {
 
     public static WebDriver getDriver() {
 
-        if (driver == null) {
+        WebDriver webDriver = driver.get();
+        if (webDriver == null) {
             System.out.println("WebDriver is not initialized");
             throw new IllegalStateException("WebDriver is not initialized");
         }
-        return driver.get();
+        return webDriver;
     }
 
     public static ActionDriver getActionDriver() {
 
-        if (actionDriver == null) {
+        ActionDriver ad = actionDriver.get();
+        if (ad == null) {
             System.out.println("ActionDriver is not initialized");
             throw new IllegalStateException("ActionDriver is not initialized");
         }
-        return actionDriver.get();
+        return ad;
     }
 
     public void setDriver(ThreadLocal<WebDriver> driver) {
