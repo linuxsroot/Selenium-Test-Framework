@@ -6,9 +6,9 @@ pipeline {
 	}
 
 	environment {
-		COMPOSE_PATH    = "${WORKSPACE}\\docker"          // where docker-compose.yml exists
+		COMPOSE_PATH    = "${WORKSPACE}\\docker"
 		SELENIUM_GRID   = "true"
-		GRID_STATUS_URL = "http://localhost:4444/status"  // Jenkins & Docker on same machine
+		GRID_STATUS_URL = "http://localhost:4444/status"
 	}
 
 	stages {
@@ -27,18 +27,9 @@ pipeline {
 					bat "docker compose -f \"${env.COMPOSE_PATH}\\docker-compose.yml\" up -d"
 
 					echo "Waiting for Selenium Grid to be ready..."
+					// retries: 30, sleep: 2s => ~60 seconds max
 					bat """
-                    powershell -NoProfile -Command ^
-                      "$u='${env.GRID_STATUS_URL}'; ^
-                       $ok=$false; ^
-                       for($i=0;$i -lt 30;$i++){ ^
-                         try{ ^
-                           $r=Invoke-WebRequest -UseBasicParsing -Uri $u -TimeoutSec 2; ^
-                           if($r.StatusCode -eq 200){ $ok=$true; break } ^
-                         } catch {} ^
-                         Start-Sleep -Seconds 2; ^
-                       } ^
-                       if(-not $ok){ throw 'Selenium Grid not ready at ' + $u }"
+                    powershell -NoProfile -ExecutionPolicy Bypass -Command "\$u='${env.GRID_STATUS_URL}'; \$ok=\$false; for(\$i=0; \$i -lt 30; \$i++){ try { \$r=Invoke-WebRequest -UseBasicParsing -Uri \$u -TimeoutSec 2; if(\$r.StatusCode -eq 200){ \$ok=\$true; break } } catch {} Start-Sleep -Seconds 2 }; if(-not \$ok){ throw 'Selenium Grid not ready: ' + \$u }"
                     """
 				}
 			}
@@ -75,7 +66,7 @@ pipeline {
 
 		success {
 			emailext(
-				to: 'pinkukumar.127.0.0.1@gmail.com',
+				to: 'hitendraverma22@gmail.com',
 				subject: "Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
 				mimeType: 'text/html',
 				attachLog: true,
@@ -96,7 +87,7 @@ pipeline {
 
 		failure {
 			emailext(
-				to: 'pinkukumar.127.0.0.1@gmail.com',
+				to: 'hitendraverma22@gmail.com',
 				subject: "Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
 				mimeType: 'text/html',
 				attachLog: true,
