@@ -2,7 +2,7 @@ pipeline {
 	agent any
 
 	tools {
-		maven 'maven-3.9.9'
+		maven 'Maven-3.9.12'
 	}
 
 	environment {
@@ -27,7 +27,6 @@ pipeline {
 					bat "docker compose -f \"${env.COMPOSE_PATH}\\docker-compose.yml\" up -d"
 
 					echo "Waiting for Selenium Grid to be ready..."
-					// retries: 30, sleep: 2s => ~60 seconds max
 					bat """
                     powershell -NoProfile -ExecutionPolicy Bypass -Command "\$u='${env.GRID_STATUS_URL}'; \$ok=\$false; for(\$i=0; \$i -lt 30; \$i++){ try { \$r=Invoke-WebRequest -UseBasicParsing -Uri \$u -TimeoutSec 2; if(\$r.StatusCode -eq 200){ \$ok=\$true; break } } catch {} Start-Sleep -Seconds 2 }; if(-not \$ok){ throw 'Selenium Grid not ready: ' + \$u }"
                     """
